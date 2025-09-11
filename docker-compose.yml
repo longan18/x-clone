@@ -1,0 +1,101 @@
+services:
+  auth-mysql:
+    image: mysql:8.0
+    restart: always
+    container_name: auth-db-container
+    environment:
+      MYSQL_DATABASE: ${AUTH_MYSQL_DATABASE}
+      MYSQL_USER: ${AUTH_MYSQL_USER}
+      MYSQL_PASSWORD: ${AUTH_MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${AUTH_MYSQL_ROOT_PASSWORD}
+    ports:
+      - "${AUTH_MYSQL_PORT_CONTAINER}:${MYSQL_PORT:-3306}"
+    networks:
+      - app-net
+
+  user-mysql:
+    image: mysql:8.0
+    restart: always
+    container_name: user-db-container
+    environment:
+      MYSQL_DATABASE: ${USER_MYSQL_DATABASE}
+      MYSQL_USER: ${USER_MYSQL_USER}
+      MYSQL_PASSWORD: ${USER_MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${USER_MYSQL_ROOT_PASSWORD}
+    ports:
+      - "${USER_MYSQL_PORT_CONTAINER}:${MYSQL_PORT:-3306}"
+    networks:
+      - app-net
+
+  post-mysql:
+    image: mysql:8.0
+    restart: always
+    container_name: post-db-container
+    environment:
+      MYSQL_DATABASE: ${POST_MYSQL_DATABASE}
+      MYSQL_USER: ${POST_MYSQL_USER}
+      MYSQL_PASSWORD: ${POST_MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${POST_MYSQL_ROOT_PASSWORD}
+    ports:
+      - "${POST_MYSQL_PORT_CONTAINER}:${MYSQL_PORT:-3306}"
+    networks:
+      - app-net
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: ./docker/dockerfile/Dockerfile.auth
+    restart: always
+    container_name: auth-service-container
+    ports:
+      - "${AUTH_SERVICE_PORT_CONTAINER}:${AUTH_SERVICE_PORT-8001}"
+    networks:
+      - app-net
+    depends_on:
+      - auth-mysql
+
+  user-service:
+    build:
+      context: .
+      dockerfile: ./docker/dockerfile/Dockerfile.user
+    restart: always
+    container_name: user-service-container
+    ports:
+      - "${USER_SERVICE_PORT_CONTAINER}:${USER_SERVICE_PORT-8002}"
+    networks:
+      - app-net
+    depends_on:
+      - user-mysql
+
+  post-service:
+    build:
+      context: .
+      dockerfile: ./docker/dockerfile/Dockerfile.post
+    restart: always
+    container_name: post-service-container
+    ports:
+      - "${POST_SERVICE_PORT_CONTAINER}:${POST_SERVICE_PORT-8003}"
+    networks:
+      - app-net
+    depends_on:
+      - post-mysql
+
+  nginx-server:
+    image: nginx:alpine
+    container_name: nginx-container
+    restart: always
+    ports:
+      - "${NGINX_PORT_CONTAINER:-80}:80"
+    volumes:
+      - ./docker/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      - ${NGINX_HOST_LOG_PATH:-./docker/logs/nginx}:/var/log/nginx
+    depends_on:
+      - auth-service
+      - user-service
+      - post-service
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    driver: bridge

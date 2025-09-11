@@ -1,0 +1,48 @@
+services:
+  auth-mysql:
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  user-mysql:
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  post-mysql:
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: ./docker/dockerfile-local/Dockerfile.auth
+    volumes:
+      - ./auth-service:/app:cached
+    depends_on:
+      auth-mysql:
+        condition: service_healthy
+
+  user-service:
+    build:
+      context: .
+      dockerfile: ./docker/dockerfile-local/Dockerfile.user
+    volumes:
+      - ./user-service:/app:cached
+    depends_on:
+      user-mysql:
+        condition: service_healthy
+
+  post-service:
+    build:
+      context: .
+      dockerfile: ./docker/dockerfile-local/Dockerfile.post
+    volumes:
+      - ./post-service:/app:cached
+    depends_on:
+      post-mysql:
+        condition: service_healthy

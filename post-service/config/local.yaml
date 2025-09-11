@@ -1,0 +1,9 @@
+server:
+  host: "0.0.0.0"
+  port: 8003
+mysql:
+  host: post-db-container
+  port: 3306
+  username: postservice
+  password: postservice@
+  dbname: postservicedb
