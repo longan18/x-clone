@@ -1,8 +1,18 @@
-// Lệnh tạo migrate: migrate create -ext sql -dir $(PATH) -seq $(NAME_TABLE)
-// Lệnh tạo database: migrate -path db/migrations -database "postgres://user:pass@localhost:5432/myapp_db?sslmode=disable" up
+Lệnh tạo migrate: migrate create ext sql dir $(PATH) seq $(NAME_TABLE)
+Lệnh tạo database: migrate path db/migrations database "postgres://user:pass@localhost:5432/myapp_db?sslmode=disable" up
 
-// Debug
-// Mỗi service là một container riêng, chạy ở port riêng
-// Mỗi service là một database riêng, chạy ở port riêng
+Debug
+Mỗi service là một container riêng, chạy ở port riêng
+Mỗi service là một database riêng, chạy ở port riêng
 
-// Cấu hình nginx
+Cấu hình nginx
+
+[viettran][Clean Architecture là gì  Ưu nhược và cách dùng hợp lý] https://200lab.io/blog/cleanarchitectureuunhuocvacachdunghoply
+Example:
+		[TRANSPOT]                 	   [BUSINESS]                           [STORAGE]
+	API update product    ---->	  UpdateProduct(product)    ---->	  <MONGODB>
+																		FindProductById(id)
+																		UpdateProduct(product)
+															---->	  <MYSQL>
+																		FindProductById(id)
+																		UpdateProduct(product)
