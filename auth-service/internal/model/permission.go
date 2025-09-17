@@ -1,6 +1,8 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 type Permission struct {
 	ID             uint         `json:"id"`
@@ -11,3 +13,13 @@ type Permission struct {
 	UpdatedAt      time.Time    `json:"updated_at"`
 	DeletedAt      *time.Time   `json:"deleted_at"`
 }
+
+const (
+	PremissionViewUser = iota + 1
+	PremissionEditUser
+	PremissionDeleteUser
+	PremissionViewPost
+	PremissionCreatePost
+	PremissionEditPost
+	PremissionDeletePost
+)

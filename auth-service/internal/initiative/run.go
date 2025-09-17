@@ -2,6 +2,6 @@ package initiative
 
 func Run() {
 	InitLoadConfig()
-	InitMySQL()
-	InitRouter()
+	db := InitMySQL()
+	InitRouter(db)
 }

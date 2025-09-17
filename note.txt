@@ -16,3 +16,32 @@ Example:
 															---->	  <MYSQL>
 																		FindProductById(id)
 																		UpdateProduct(product)
+
+--------------------------------------
+type A interface {
+	Test() string
+}
+
+type B struct {
+	v1 string
+	v2 string
+}
+
+type C struct {
+	v3 string
+	v4 string
+}
+
+func (b B) Test() string{
+	return v1 + v2
+}
+
+func (c C) Test() string{
+	return v3 + v4
+}
+
+func main() {
+	var a A
+	a = B{v1: "123", v2: "456"}
+	fmt.Println(a.Test())
+}

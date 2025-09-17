@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitMySQL() {
+func InitMySQL() *gorm.DB{
 	config := global.Config.Mysql
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
@@ -19,9 +19,11 @@ func InitMySQL() {
 		config.Dbname,
 	)
 
-	_, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		panic("failed to connect database")
 	}
+
+	return db
 }

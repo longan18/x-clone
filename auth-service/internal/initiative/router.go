@@ -2,25 +2,26 @@ package initiative
 
 import (
 	"auth-service/global"
-	usertransp "auth-service/internal/transport/user"
+	usertransp "auth-service/internal/module/user/transport"
 	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
-func InitRouter() {
+func InitRouter(db *gorm.DB) {
 	r := gin.Default()
 
 	v1 := r.Group("/v1")
 	{
 		user := v1.Group("/user")
 		{
-			user.GET("", usertransp.ListUserTransp)
-			user.POST("/store", usertransp.CreateUserTransp)
-			user.GET("/:id", usertransp.GetUserTransp)
-			user.PUT("/:id/update", usertransp.UpdateUserTransp)
-			user.DELETE("/:id/delete", usertransp.DeleteUserTransp)
+			user.GET("", usertransp.ListUserTransp(db))
+			user.POST("/store", usertransp.CreateUserTransp(db))
+			user.GET("/:id", usertransp.GetUserTransp(db))
+			user.PUT("/:id/update", usertransp.UpdateUserTransp(db))
+			user.DELETE("/:id/delete", usertransp.DeleteUserTransp(db))
 		}
 	}
 

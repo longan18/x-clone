@@ -11,3 +11,9 @@ type Role struct {
 	UpdatedAt   time.Time    `json:"updated_at"`
 	DeletedAt   *time.Time   `json:"deleted_at"`
 }
+
+const (
+	RoleAdmin = iota + 1
+	RoleUser
+	RoleGuest
+)
