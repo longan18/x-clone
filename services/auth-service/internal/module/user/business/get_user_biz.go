@@ -28,6 +28,8 @@ func (gu *getUserBiz) GetUserById(id int) (*model.User, error) {
 		return nil, common.ErrInternalServerError.WithTrace(err).WithReason("Failed to get user from database")
 	}
 
+	user.Mask(user.Id)
+
 	return user, nil
 }
 
@@ -41,6 +43,8 @@ func (gu *getUserBiz) GetUserByEmail(email string) (*model.User, error) {
 		return nil, common.ErrInternalServerError.WithTrace(err).WithReason("Failed to get user by email from database")
 	}
 
+	user.Mask(user.Id)
+
 	return user, nil
 }
 
@@ -53,6 +57,8 @@ func (gu *getUserBiz) GetUserByUsername(username string) (*model.User, error) {
 		}
 		return nil, common.ErrInternalServerError.WithTrace(err).WithReason("Failed to get user by username from database")
 	}
+
+	user.Mask(user.Id)
 
 	return user, nil
 }

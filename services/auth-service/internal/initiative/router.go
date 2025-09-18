@@ -18,11 +18,11 @@ func InitRouter(db *gorm.DB) {
 	{
 		user := v1.Group("/user")
 		{
-			user.GET("", usertransp.ListUserTransp(db))
-			user.POST("/store", usertransp.CreateUserTransp(db))
-			user.GET("/:id", usertransp.GetUserTransp(db))
-			user.PUT("/:id/update", usertransp.UpdateUserTransp(db))
-			user.DELETE("/:id/delete", usertransp.DeleteUserTransp(db))
+			user.GET("", usertransp.ListUserHdl(db))
+			user.POST("/store", usertransp.CreateUserHdl(db))
+			user.GET("/:id", usertransp.GetUserHdl(db))
+			user.PUT("/:id/update", usertransp.UpdateUserHdl(db))
+			user.DELETE("/:id/delete", usertransp.DeleteUserHdl(db))
 		}
 	}
 

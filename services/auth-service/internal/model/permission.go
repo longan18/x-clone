@@ -1,17 +1,16 @@
 package model
 
 import (
+	"auth-service/internal/common"
 	"time"
 )
 
 type Permission struct {
-	ID             uint         `json:"id"`
-	PermissionName string       `json:"permission_name"`
-	Description    string       `json:"description"`
-	Roles          []Permission `gorm:"many2many:role_permissions" json:"roles"`
-	CreatedAt      time.Time    `json:"created_at"`
-	UpdatedAt      time.Time    `json:"updated_at"`
-	DeletedAt      *time.Time   `json:"deleted_at"`
+	common.SQLModel
+	PermissionName string     `json:"permission_name"`
+	Description    string     `json:"description"`
+	Roles          []Role     `gorm:"many2many:role_permissions" json:"roles"`
+	DeletedAt      *time.Time `json:"deleted_at"`
 }
 
 const (

@@ -3,6 +3,7 @@ package business
 import (
 	"auth-service/internal/common"
 	"auth-service/internal/model"
+	"auth-service/internal/module/user/entity"
 	"auth-service/internal/util"
 	"context"
 	"strings"
@@ -25,20 +26,20 @@ func NewCreateUserBiz(biz StoreUserStorage) *createUserBiz {
 	}
 }
 
-func (cu *createUserBiz) CreateNewUser(ctx context.Context, userReq model.UserRequest) (*model.User, error) {
-	existingUser, _ := cu.getUserBiz.GetUserByEmail(userReq.Email)
+func (cu *createUserBiz) CreateNewUser(ctx context.Context, userReq *model.UserRequest) (*model.User, error) {
+	existingUser, _ := cu.getUserBiz.GetUserByUsername(userReq.UserName)
 	if existingUser != nil {
-		return nil, common.ErrConflict.WithError(model.ErrEmailExistedMsg).WithID(model.ErrEmailExisted)
+		return nil, common.ErrConflict.WithError(entity.ErrUsernameHasExisted.Error()).WithID(entity.ErrUsernameExisted)
 	}
 
-	existingUser, _ = cu.getUserBiz.GetUserByUsername(userReq.UserName)
+	existingUser, _ = cu.getUserBiz.GetUserByEmail(userReq.Email)
 	if existingUser != nil {
-		return nil, common.ErrConflict.WithError(model.ErrUsernameExistedMsg).WithID(model.ErrUsernameExisted)
+		return nil, common.ErrConflict.WithError(entity.ErrEmailHasExisted.Error()).WithID(entity.ErrEmailExisted)
 	}
 
 	hashed, err := util.HashPassword(strings.TrimSpace(userReq.Password))
 	if err != nil {
-		return nil, common.ErrInternalServerError.WithTrace(err).WithID(model.ErrHashPassword).WithReason("Failed to hash password")
+		return nil, common.ErrInternalServerError.WithTrace(err).WithID(entity.ErrHashPassword).WithReason("Failed to hash password")
 	}
 
 	var user model.User
@@ -47,7 +48,7 @@ func (cu *createUserBiz) CreateNewUser(ctx context.Context, userReq model.UserRe
 	user.PasswordHash = hashed
 
 	if err := cu.biz.CreateUser(ctx, &user); err != nil {
-		return nil, common.ErrInternalServerError.WithTrace(err).WithID(model.ErrCreateUser).WithReason("Failed to create user in database")
+		return nil, common.ErrInternalServerError.WithTrace(err).WithID(entity.ErrCreateUser).WithReason("Failed to create user in database")
 	}
 
 	return &user, nil
