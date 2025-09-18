@@ -16,9 +16,9 @@ URL_CONNECT_DB = $(if $(filter auth,$(SERVICE)),"mysql://$(AUTH_MYSQL_USER):$(AU
              $(if $(filter user,$(SERVICE)),"mysql://$(USER_MYSQL_USER):$(USER_MYSQL_PASSWORD)@tcp($(DB_HOST):$(USER_MYSQL_PORT_CONTAINER))/$(USER_MYSQL_DATABASE)",\
              "mysql://$(POST_MYSQL_USER):$(POST_MYSQL_PASSWORD)@tcp($(DB_HOST):$(POST_MYSQL_PORT_CONTAINER))/$(POST_MYSQL_DATABASE)"))
 
-MIGRATE_DIR = $(if $(filter auth,$(SERVICE)),auth-service/migrations,\
-             $(if $(filter user,$(SERVICE)),user-service/migrations,\
-             post-service/migrations))
+MIGRATE_DIR = $(if $(filter auth,$(SERVICE)),services/auth-service/migrations,\
+             $(if $(filter user,$(SERVICE)),services/user-service/migrations,\
+             services/post-service/migrations))
 migrate:
 ifndef SERVICE
 	$(error ERROR: SERVICE is not set! Please provide SERVICE variable)

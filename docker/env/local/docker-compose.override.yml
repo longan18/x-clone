@@ -22,7 +22,7 @@ services:
       context: .
       dockerfile: ./docker/dockerfile-local/Dockerfile.auth
     volumes:
-      - ./auth-service:/app:cached
+      - ./services/auth-service:/app:cached
     depends_on:
       auth-mysql:
         condition: service_healthy
@@ -32,7 +32,7 @@ services:
       context: .
       dockerfile: ./docker/dockerfile-local/Dockerfile.user
     volumes:
-      - ./user-service:/app:cached
+      - ./services/user-service:/app:cached
     depends_on:
       user-mysql:
         condition: service_healthy
@@ -42,7 +42,7 @@ services:
       context: .
       dockerfile: ./docker/dockerfile-local/Dockerfile.post
     volumes:
-      - ./post-service:/app:cached
+      - ./services/post-service:/app:cached
     depends_on:
       post-mysql:
         condition: service_healthy
