@@ -3,7 +3,7 @@ package initiative
 import (
 	"auth-service/global"
 	"auth-service/internal/common"
-	usertransp "auth-service/internal/module/user/transport"
+	userTransport "auth-service/internal/module/user/transport"
 	"fmt"
 	"net/http"
 
@@ -18,11 +18,11 @@ func InitRouter(db *gorm.DB) {
 	{
 		user := v1.Group("/user")
 		{
-			user.GET("", usertransp.ListUserHdl(db))
-			user.POST("/store", usertransp.CreateUserHdl(db))
-			user.GET("/:id", usertransp.GetUserHdl(db))
-			user.PUT("/:id/update", usertransp.UpdateUserHdl(db))
-			user.DELETE("/:id/delete", usertransp.DeleteUserHdl(db))
+			user.GET("", userTransport.ListUserHdl(db))
+			user.POST("/store", userTransport.CreateUserHdl(db))
+			user.GET("/:id", userTransport.GetUserHdl(db))
+			user.PUT("/:id/update", userTransport.UpdateUserHdl(db))
+			user.DELETE("/:id/delete", userTransport.DeleteUserHdl(db))
 		}
 	}
 

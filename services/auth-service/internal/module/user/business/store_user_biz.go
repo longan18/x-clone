@@ -2,7 +2,7 @@ package business
 
 import (
 	"auth-service/internal/common"
-	"auth-service/internal/model"
+	roleEntity "auth-service/internal/module/role/entity"
 	"auth-service/internal/module/user/entity"
 	"auth-service/internal/util"
 	"context"
@@ -10,8 +10,12 @@ import (
 )
 
 type StoreUserStorage interface {
-	CreateUser(ctx context.Context, user *model.User) error
-	FirstUserByConditions(data map[string]interface{}) (*model.User, error)
+	CreateUser(ctx context.Context, user *entity.User) error
+	FirstUserByConditions(data map[string]interface{}) (*entity.User, error)
+}
+
+type GetRoleStorage interface {
+	GetRoleByIds(ids []int) (*roleEntity.Role, error)
 }
 
 type createUserBiz struct {
@@ -26,7 +30,7 @@ func NewCreateUserBiz(biz StoreUserStorage) *createUserBiz {
 	}
 }
 
-func (cu *createUserBiz) CreateNewUser(ctx context.Context, userReq *model.UserRequest) (*model.User, error) {
+func (cu *createUserBiz) CreateNewUser(ctx context.Context, userReq *entity.UserRequest) (*entity.User, error) {
 	existingUser, _ := cu.getUserBiz.GetUserByUsername(userReq.UserName)
 	if existingUser != nil {
 		return nil, common.ErrConflict.WithError(entity.ErrUsernameHasExisted.Error()).WithID(entity.ErrUsernameExisted)
@@ -42,7 +46,7 @@ func (cu *createUserBiz) CreateNewUser(ctx context.Context, userReq *model.UserR
 		return nil, common.ErrInternalServerError.WithTrace(err).WithID(entity.ErrHashPassword).WithReason("Failed to hash password")
 	}
 
-	var user model.User
+	var user entity.User
 	user.Email = userReq.Email
 	user.UserName = userReq.UserName
 	user.PasswordHash = hashed

@@ -2,8 +2,8 @@ package transport
 
 import (
 	"auth-service/internal/common"
-	"auth-service/internal/model"
 	"auth-service/internal/module/user/business"
+	"auth-service/internal/module/user/entity"
 	storage "auth-service/internal/module/user/storage"
 	"net/http"
 
@@ -13,7 +13,7 @@ import (
 
 func CreateUserHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var userReq model.UserRequest
+		var userReq entity.UserRequest
 
 		if err := c.ShouldBindJSON(&userReq); err != nil {
 			validationErr := common.ErrBadRequest.WithTrace(err).WithReason("Invalid request format")

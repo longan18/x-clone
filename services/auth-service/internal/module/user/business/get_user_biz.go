@@ -2,12 +2,12 @@ package business
 
 import (
 	"auth-service/internal/common"
-	"auth-service/internal/model"
+	"auth-service/internal/module/user/entity"
 	"errors"
 )
 
 type GetUserStorage interface {
-	FirstUserByConditions(data map[string]interface{}) (*model.User, error)
+	FirstUserByConditions(data map[string]interface{}) (*entity.User, error)
 }
 
 type getUserBiz struct {
@@ -18,7 +18,7 @@ func NewGetUserBiz(biz GetUserStorage) *getUserBiz {
 	return &getUserBiz{biz: biz}
 }
 
-func (gu *getUserBiz) GetUserById(id int) (*model.User, error) {
+func (gu *getUserBiz) GetUserById(id int) (*entity.User, error) {
 	user, err := gu.biz.FirstUserByConditions(map[string]interface{}{"id": id})
 
 	if err != nil {
@@ -33,7 +33,7 @@ func (gu *getUserBiz) GetUserById(id int) (*model.User, error) {
 	return user, nil
 }
 
-func (gu *getUserBiz) GetUserByEmail(email string) (*model.User, error) {
+func (gu *getUserBiz) GetUserByEmail(email string) (*entity.User, error) {
 	user, err := gu.biz.FirstUserByConditions(map[string]interface{}{"email": email})
 
 	if err != nil {
@@ -48,7 +48,7 @@ func (gu *getUserBiz) GetUserByEmail(email string) (*model.User, error) {
 	return user, nil
 }
 
-func (gu *getUserBiz) GetUserByUsername(username string) (*model.User, error) {
+func (gu *getUserBiz) GetUserByUsername(username string) (*entity.User, error) {
 	user, err := gu.biz.FirstUserByConditions(map[string]interface{}{"username": username})
 
 	if err != nil {
