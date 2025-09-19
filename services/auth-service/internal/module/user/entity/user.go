@@ -22,3 +22,10 @@ type UserRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
+
+type UserUpdateRequest struct {
+	Roles    []int  `json:"roles,omitempty"`
+	UserName string `json:"username,omitempty"`
+	Email    string `json:"email,omitempty"`
+	Password string `json:"password,omitempty"`
+}

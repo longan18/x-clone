@@ -39,8 +39,23 @@ func (gu *getRoleBiz) GetRoleByIds(ids []int) ([]entity.Role, error) {
 		if errors.Is(err, common.ErrRecordNotFound) {
 			return nil, common.ErrNotFound.WithTrace(err).WithReason("Role not found")
 		}
-		return nil, common.ErrInternalServerError.WithTrace(err).WithReason("Failed to get user from database")
+		return nil, common.ErrInternalServerError.WithTrace(err).WithReason("Failed to get roles from database")
 	}
 
 	return roles, nil
+}
+
+func (gu *getRoleBiz) GetRoleByName(roleName string) (*entity.Role, error) {
+	role, err := gu.biz.FirstRoleByConditions(map[string]interface{}{"role_name": roleName})
+
+	if err != nil {
+		if errors.Is(err, common.ErrRecordNotFound) {
+			return nil, common.ErrNotFound.WithTrace(err).WithReason("Role with this name not found")
+		}
+		return nil, common.ErrInternalServerError.WithTrace(err).WithReason("Failed to get role by name from database")
+	}
+
+	role.Mask(role.Id)
+
+	return role, nil
 }

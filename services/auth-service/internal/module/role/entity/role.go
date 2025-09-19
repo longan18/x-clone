@@ -13,6 +13,16 @@ type Role struct {
 	DeletedAt   *gorm.DeletedAt `json:"deleted_at,omitempty"`
 }
 
+type RoleRequest struct {
+	RoleName    string `json:"role_name"`
+	Description string `json:"description"`
+}
+
+type RoleUpdateRequest struct {
+	RoleName    string `json:"role_name,omitempty"`
+	Description string `json:"description,omitempty"`
+}
+
 const (
 	RoleAdmin = iota + 1
 	RoleUser
