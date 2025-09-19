@@ -4,7 +4,8 @@ import (
 	"auth-service/internal/common"
 	"auth-service/internal/module/user/business"
 	"auth-service/internal/module/user/entity"
-	storage "auth-service/internal/module/user/storage"
+	ustr "auth-service/internal/module/user/storage"
+	rstr "auth-service/internal/module/role/storage"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,8 +22,9 @@ func CreateUserHdl(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		storage := storage.NewMySQLStorage(db)
-		biz := business.NewCreateUserBiz(storage)
+		ustr := ustr.NewMySQLStorage(db)
+		rstr := rstr.NewMySQLStorage(db)
+		biz := business.NewCreateUserBiz(ustr, rstr)
 
 		user, err := biz.CreateNewUser(c, &userReq)
 		if err != nil {

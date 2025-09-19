@@ -13,12 +13,11 @@ func (s *mysqlStorage) FirstRoleByConditions(data map[string]interface{}) (*enti
 	return user, nil
 }
 
-func (s *mysqlStorage) GetRoleByIds(ids []int) (*entity.Role, error) {
-	var user *entity.Role
-	if err := s.db.Where("id IN ?", ids).Find(&user).Error; err != nil {
+func (s *mysqlStorage) GetRoleByIds(ids []int) ([]entity.Role, error) {
+	var roles []entity.Role
+	if err := s.db.Where("id IN ?", ids).Find(&roles).Error; err != nil {
 		return nil, err
 	}
 
-	return user, nil
+	return roles, nil
 }
-

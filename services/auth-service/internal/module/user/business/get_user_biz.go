@@ -30,6 +30,13 @@ func (gu *getUserBiz) GetUserById(id int) (*entity.User, error) {
 
 	user.Mask(user.Id)
 
+	if len(user.Roles) > 0 {
+		for i, r := range user.Roles {
+			r.Mask(r.Id)
+			user.Roles[i] = r
+		}
+	}
+
 	return user, nil
 }
 

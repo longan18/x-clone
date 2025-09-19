@@ -3,7 +3,7 @@ package transport
 import (
 	"auth-service/internal/common"
 	"auth-service/internal/module/user/business"
-	storage "auth-service/internal/module/user/storage"
+	ustr "auth-service/internal/module/user/storage"
 	"net/http"
 	"strconv"
 
@@ -30,8 +30,8 @@ func GetUserHdl(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		storage := storage.NewMySQLStorage(db)
-		biz := business.NewGetUserBiz(storage)
+		ustr := ustr.NewMySQLStorage(db)
+		biz := business.NewGetUserBiz(ustr)
 
 		user, err := biz.GetUserById(id)
 		if err != nil {

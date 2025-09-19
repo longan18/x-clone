@@ -8,7 +8,7 @@ import (
 
 type GetRoleStorage interface {
 	FirstRoleByConditions(data map[string]interface{}) (*entity.Role, error)
-	GetRoleByIds(ids []int) (*entity.Role, error)
+	GetRoleByIds(ids []int) ([]entity.Role, error)
 }
 
 type getRoleBiz struct {
@@ -32,8 +32,8 @@ func (gu *getRoleBiz) GetRoleById(id int) (*entity.Role, error) {
 	return role, nil
 }
 
-func (gu *getRoleBiz) GetRoleByIds(ids []int) (*entity.Role, error) {
-	role, err := gu.biz.GetRoleByIds(ids)
+func (gu *getRoleBiz) GetRoleByIds(ids []int) ([]entity.Role, error) {
+	roles, err := gu.biz.GetRoleByIds(ids)
 
 	if err != nil {
 		if errors.Is(err, common.ErrRecordNotFound) {
@@ -42,5 +42,5 @@ func (gu *getRoleBiz) GetRoleByIds(ids []int) (*entity.Role, error) {
 		return nil, common.ErrInternalServerError.WithTrace(err).WithReason("Failed to get user from database")
 	}
 
-	return role, nil
+	return roles, nil
 }
